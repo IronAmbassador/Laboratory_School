@@ -5,13 +5,15 @@
 /mvnw.cmd
 /.idea/
 /.vscode/
-/*.iml
+**/*.iml
 *.log
 *.cache
 *.project
 *.classpath
 *.settings
 *.springBeans
+/h2.mv.db
+/lombok.config
 
 # Vue 项目的常见忽略项
 /node_modules/
@@ -24,3 +26,5 @@
 /npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/coverage/
+/.vscode/
