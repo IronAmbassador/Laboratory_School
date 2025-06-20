@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laboratory.mapper.CourseMapper">
+
+    <!-- 查询 -->
+    <select id="getAll" resultType="com.laboratory.model.vo.course.CourseVo" parameterType="com.laboratory.model.dto.course.CourseQueryDto">
+        select * from lab_course c left join lab_sub l on c.lab_id = l.id
+        where c.is_deleted = 0 and l.is_deleted = 0
+        <if test="courseName != null and courseName != ''">
+            and c.name like concat('%', #{courseName}, '%')
+        </if>
+        <if test="teacher != null and teacher != ''">
+            and c.teacher like concat('%', #{teacher}, '%')
+        </if>
+        <if test="labId != null and labId != ''">
+            and c.lab_id = #{labId}
+        </if>
+        order by c.update_time desc
+    </select>
+
+    <!-- 获取导出数据 -->
+    <select id="getExportData" resultType="com.laboratory.model.vo.course.CourseEEVO">
+        SELECT
+            course.id,
+            course.name,
+            course.teacher,
+            course.up_time,
+            course.down_time,
+            lab.lab_name
+        FROM
+            lab_course course
+                LEFT JOIN lab_sub lab ON course.lab_id = lab.id
+        WHERE
+            course.is_deleted = 0
+          AND lab.is_deleted = 0;
+    </select>
+</mapper>

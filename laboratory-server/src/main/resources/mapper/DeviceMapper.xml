@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laboratory.mapper.DeviceMapper">
+
+    <!-- 查询 -->
+    <select id="getAll" resultType="com.laboratory.model.vo.device.DeviceVo" parameterType="com.laboratory.model.dto.device.DeviceQueryDto">
+        select * from lab_device d left join lab_sub l on d.lab_id = l.id
+        where d.is_deleted = 0 and l.is_deleted = 0
+        <if test="deviceName != null and deviceName != ''">
+            and d.device_name like concat('%', #{deviceName}, '%')
+        </if>
+        <if test="minPrice != null and minPrice != 0">
+            and d.device_price >= #{minPrice}
+        </if>
+        <if test="maxPrice != null and maxPrice != 0">
+            and d.device_price &lt;= #{maxPrice}
+        </if>
+        <if test="deviceStatus != null">
+            and d.device_status = #{deviceStatus}
+        </if>
+        order by d.update_time desc
+    </select>
+
+    <!-- 实验室设备导出数据 -->
+    <select id="getExportData" resultType="com.laboratory.model.vo.device.DeviceEEVO">
+        SELECT
+            device.id,
+            device.device_name,
+            device.device_date,
+            device.device_price,
+            device.guarantee,
+            device.device_factory,
+            lab.lab_name
+        FROM
+            lab_device device
+                LEFT JOIN lab_sub lab ON device.lab_id = lab.id
+        WHERE
+            device.is_deleted = 0
+          AND lab.is_deleted = 0
+    </select>
+
+
+    <select id="getRepairCount" resultType="java.lang.Long">
+            WITH RECURSIVE DateSeries AS (
+                SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) AS date
+                UNION ALL
+                SELECT DATE_ADD(date, INTERVAL 1 DAY)
+                FROM DateSeries
+                WHERE date &lt; CURDATE()
+            )
+            SELECT
+                COALESCE(COUNT(ld.create_time), 0) AS device_count
+            FROM DateSeries ds
+                     LEFT JOIN lab_device ld ON ds.date = DATE(ld.create_time)
+            WHERE ds.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+            GROUP BY ds.date
+            ORDER BY ds.date;
+    </select>
+</mapper>

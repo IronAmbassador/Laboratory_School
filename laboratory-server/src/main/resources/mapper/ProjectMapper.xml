@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laboratory.mapper.ProjectMapper">
+
+
+    <select id="getAll" resultType="com.laboratory.model.vo.project.ProjectVO">
+        SELECT
+            p.*,
+            c.name AS courseName,
+            GROUP_CONCAT( per.name ) AS personNames
+        FROM
+            lab_project p
+                LEFT JOIN lab_course c ON p.course_id = c.id
+                LEFT JOIN lab_person per ON FIND_IN_SET( per.id, p.person_ids ) > 0
+        where p.is_deleted = 0
+        <if test="courseId != null and courseId != ''">
+            and p.course_id = #{courseId}
+        </if>
+        <if test="name != null and name != ''">
+            and p.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        GROUP BY
+            p.id,
+            p.name
+        ORDER BY
+            p.update_time desc
+    </select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laboratory.mapper.SubMapper">
+
+    <!-- 查询 -->
+    <select id="getAll" resultType="com.laboratory.model.vo.labSub.SubVo" parameterType="com.laboratory.model.dto.labSub.SubQueryDTO">
+        select * from lab_sub l left join lab_info l2 on l.lab_id = l2.id
+        where l.is_deleted = 0 and l2.is_deleted = 0
+        <if test="labId != null and labId != ''">
+            and l.lab_id = #{labId}
+        </if>
+        <if test="labName != null and labName != ''">
+            and l.lab_name like concat('%', #{labName}, '%')
+        </if>
+        <if test="labCreateYear != null and labCreateYear != ''">
+            and l.lab_create_year = #{labCreateYear}
+        </if>
+        <if test="labAddr != null and labAddr != ''">
+            and l.lab_addr like concat('%', #{labAddr}, '%')
+        </if>
+        <if test="labStatus != null">
+            and l.lab_status = #{labStatus}
+        </if>
+        order by l.update_time desc
+    </select>
+
+    <!-- 获取导出数据 -->
+    <select id="getExportDate" resultType="com.laboratory.model.vo.labSub.SubEEVO">
+        SELECT
+            ll.id,
+            ll.lab_name,
+            ll.lab_type,
+            ll.lab_create_year,
+            ll.lab_area,
+            ll.lab_addr,
+            ll.lab_seat,
+            ll.lab_major,
+            l.name
+        FROM
+            lab_sub ll
+                LEFT JOIN lab_info l ON ll.lab_id = l.id
+        WHERE
+            ll.is_deleted = 0
+          AND l.is_deleted = 0
+    </select>
+
+    <select id="selectWeekCount" resultType="long">
+
+        WITH RECURSIVE DateSeries AS (
+        SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY)
+        FROM DateSeries
+        WHERE date &lt; CURDATE()
+        )
+        SELECT
+        COALESCE(COUNT(ld.create_time), 0) AS lab_count
+        FROM DateSeries ds
+        LEFT JOIN lab_sub ld ON ds.date = DATE(ld.create_time)
+        WHERE ds.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        GROUP BY ds.date
+        ORDER BY ds.date;
+
+    </select>
+
+</mapper>
