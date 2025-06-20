@@ -1,0 +1,52 @@
+# 项目名称
+name: laboratory-system
+
+services:
+  # 数据库服务
+  mysql:
+    # 容器名称
+    container_name: laboratory-mysql
+    # 构建镜像 Dockerfile 所在目录
+    build:
+      context: ./db
+    # 镜像名称
+    image: laboratory-mysql
+    # 容器重启策略
+    restart: unless-stopped
+    # 端口号
+    ports:
+      - "3301:3306"
+    # 环境变量
+    environment:
+      - MYSQL_ROOT_PASSWORD=asdfghjkl
+      - MYSQL_DATABASE=laboratorydb
+    # 挂载目录
+    volumes:
+      - ./evn/mysql:/var/lib/mysql
+
+  # 后端服务
+  server:
+    container_name: laboratory-server
+    build:
+      context: ./server/
+    image: laboratory-server
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_OPTS: "-Xms256m -Xmx256m"
+    depends_on:
+      - mysql
+
+  # 前端服务
+  admin:
+    container_name: laboratory-admin
+    build:
+      context: ./admin/
+    image: laboratory-admin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - server

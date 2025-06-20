@@ -1,0 +1,26 @@
+# Spring Boot 应用的常见忽略项
+/target/
+/.mvn/
+/mvnw
+/mvnw.cmd
+/.idea/
+/.vscode/
+/*.iml
+*.log
+*.cache
+*.project
+*.classpath
+*.settings
+*.springBeans
+
+# Vue 项目的常见忽略项
+/node_modules/
+/dist/
+/dist-ssr/
+/.env.development.local
+/.env.production.local
+/.env.test.local
+/.env.local
+/npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
