@@ -40,6 +40,7 @@ const adminPer = [
       icon: 'el-icon-office-building'
     },
     children: [
+      // 原有：实验室管理
       {
         path: '',
         component: () => import('@/views/lab/sub/index'),
@@ -47,9 +48,73 @@ const adminPer = [
           title: '实验室管理',
           icon: 'el-icon-school'
         }
+      },
+       // 补充：实验室预约
+      {
+        path: 'booking',
+        name: 'LabBooking',
+        component: () => import('@/views/lab/booking/index'),
+        meta: {
+          title: '实验室预约管理',
+          icon: 'el-icon-date'
+        }
+      },
+      // 补充：实验室开放管理
+      {
+        path: 'open',
+        name: 'LabOpen',
+        component: () => import('@/views/lab/open/index'),
+        meta: {
+          title: '实验室开放管理',
+          icon: 'el-icon-s-data'
+        }
+      },
+      // 补充：实验室人员管理
+      {
+        path: 'person',
+        name: 'LabPerson',
+        component: () => import('@/views/lab/person/index'),
+        meta: {
+          title: '实验室人员管理',
+          icon: 'el-icon-document-copy'
+        }
       }
     ]
   },
+
+   // 课程管理模块（管理员完整权限）
+  {
+    path: '/course',
+    component: Layout,
+    redirect: '/course/index',
+    meta: {
+      title: '课程管理',
+      icon: 'el-icon-notebook-2'
+    },
+    children: [
+      // 课程列表
+      {
+        path: 'index',
+        name: 'CourseIndex',
+        component: () => import('@/views/course/index'),
+        meta: {
+          title: '课程列表',
+          icon: 'el-icon-menu'
+        }
+      },
+      // 项目管理
+      {
+        path: 'project/index',
+        name: 'ProjectIndex',
+        component: () => import('@/views/course/project/index'),
+        meta: {
+          title: '项目管理',
+          icon: 'el-icon-location-outline'
+        }
+      }
+    ]
+  },
+
 
 
 
@@ -99,11 +164,72 @@ const teacherPer = [
           title: '实验室查看',
           icon: 'el-icon-school'
         }
+      },
+      // 个人预约记录（教师：仅操作自身数据）
+      {
+        path: 'booking',
+        name: 'LabBooking',
+        component: () => import('@/views/lab/booking/index'),
+        meta: {
+          title: '个人预约记录',
+          icon: 'el-icon-document-copy'
+        }
+      },
+      // 补充：实验室开放查看
+      {
+        path: 'open',
+        name: 'LabOpen',
+        component: () => import('@/views/lab/open/index'),
+        meta: {
+          title: '实验室开放查看',
+          icon: 'el-icon-s-data'
+        }
+      },
+      //实验室人员管理
+      {
+        path: 'person',
+        name: 'LabPerson',
+        component: () => import('@/views/lab/person/index'),
+        meta: {
+          title: '实验室人员管理',
+          icon: 'el-icon-document-copy'
+        }
       }
     ]
   },
 
-
+   // 课程管理模块（教师完整权限）
+  {
+    path: '/course',
+    component: Layout,
+    redirect: '/course/index',
+    meta: {
+      title: '课程管理',
+      icon: 'el-icon-notebook-2'
+    },
+    children: [
+      // 课程列表
+      {
+        path: 'index',
+        name: 'CourseIndex',
+        component: () => import('@/views/course/index'),
+        meta: {
+          title: '课程列表',
+          icon: 'el-icon-menu'
+        }
+      },
+      // 项目管理
+      {
+        path: 'project/index',
+        name: 'ProjectIndex',
+        component: () => import('@/views/course/project/index'),
+        meta: {
+          title: '项目管理',
+          icon: 'el-icon-location-outline'
+        }
+      }
+    ]
+  },
 
   {
     path: '/device',
@@ -151,18 +277,58 @@ const studentPer = [
           title: '实验室查看',
           icon: 'el-icon-school'
         }
+      },
+      // 个人预约记录（学生：仅操作自身数据）
+      {
+        path: 'booking',
+        name: 'LabBooking',
+        component: () => import('@/views/lab/booking/index'),
+        meta: {
+          title: '个人预约记录',
+          icon: 'el-icon-document-copy'
+        }
+      },
+      // 补充：实验室开放查看
+      {
+        path: 'open',
+        name: 'LabOpen',
+        component: () => import('@/views/lab/open/index'),
+        meta: {
+          title: '实验室开放查看',
+          icon: 'el-icon-s-data'
+        }
       }
     ]
   },
 
-
+ // 课程管理（学生仅查看）
+  {
+    path: '/course',
+    component: Layout,
+    redirect: '/course/index',
+    meta: {
+      title: '课程查看',
+      icon: 'el-icon-notebook-2'
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'CourseIndex',
+        component: () => import('@/views/course/index'),
+        meta: {
+          title: '课程列表',
+          icon: 'el-icon-menu'
+        }
+      }
+    ]
+  },
 
   {
     path: '/device',
     component: Layout,
     redirect: '',
     meta: {
-      title: '安全检查登记',
+      title: '设备报修',
       icon: 'el-icon-s-check'
     },
     children: [
@@ -170,7 +336,7 @@ const studentPer = [
         path: '',
         component: () => import('@/views/device/repair/edit'),
         meta: {
-          title: '安全检查',
+          title: '设备报修登记',
           icon: 'el-icon-view'
         }
       }
