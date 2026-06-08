@@ -119,6 +119,7 @@ export default {
       })
     },
 
+
     // 登录
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
@@ -157,7 +158,7 @@ export default {
 }
 </script>
 
-<styel lang="scss">
+<style lang="scss">
 $bg: #283443;
 
 .login-container {
@@ -196,4 +197,4 @@ $bg: #283443;
   margin-left: 10px;
   flex-shrink: 0;
 }
-</styel>
+</style>

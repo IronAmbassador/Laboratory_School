@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laboratory.mapper.BookingMapper">
+
+    <select id="getAll" resultType="com.laboratory.model.vo.labBooking.BookingVO"
+            parameterType="com.laboratory.model.dto.labBooking.BookingQueryDTO">
+        SELECT
+        lb.*,
+        ls.lab_name,
+        u.nickname AS username,
+        u.role_id,
+        concat( lb.start_time, ' - ', lb.end_time ) AS bookingTime
+        FROM
+        lab_booking lb
+        LEFT JOIN lab_sub ls ON lb.lab_id = ls.id
+        LEFT JOIN lab_user u ON lb.user_id = u.id
+        WHERE
+        lb.is_deleted = 0
+        AND ls.is_deleted = 0
+        AND u.is_deleted = 0
+        <if test="userId != null">
+            and lb.user_id = #{userId}
+        </if>
+        <if test="labId != null">
+            and lb.lab_id = #{labId}
+        </if>
+        <if test="bookingStatus != null">
+            and lb.booking_status = #{bookingStatus}
+        </if>
+        <if test="startTime != null">
+            and lb.start_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null">
+            and lb.end_time &lt; #{endTime}
+        </if>
+        order by lb.update_time desc
+    </select>
+</mapper>

@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.laboratory.mapper.BookingMapper;
+import com.laboratory.mapper.OpenMapper;
 import com.laboratory.model.dto.labBooking.BookingProcessDTO;
 import com.laboratory.model.dto.labBooking.BookingQueryDTO;
 import com.laboratory.model.entity.Booking;
@@ -12,22 +13,34 @@ import com.laboratory.model.vo.labBooking.BookingVO;
 import com.laboratory.service.BookingService;
 import com.laboratory.utils.CommonUtils;
 import com.laboratory.utils.SecurityHolderUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * @author lucky
- * @description 针对表【lab_booking】的数据库操作Service实现
- * @createDate 2024-07-18 20:11:27
- */
+
 @Service
 public class BookingServiceImpl extends ServiceImpl<BookingMapper, Booking>
         implements BookingService {
 
+    @Autowired
+    private OpenMapper openMapper;
+
     @Override
     public boolean save(Booking entity) {
+        // 判断实验室是否在开放时间
+        int openCount = openMapper.countOpenByTime(
+                entity.getLabId(),
+                entity.getStartTime(),
+                entity.getEndTime()
+        );
+
+        if (openCount == 0) {
+            throw new RuntimeException("预约失败：实验室在所选时间段不开放");
+        }
+
         entity.setUserId(SecurityHolderUtils.getUserId());
         return super.save(entity);
     }
@@ -65,7 +78,3 @@ public class BookingServiceImpl extends ServiceImpl<BookingMapper, Booking>
         return super.updateById(labBooking);
     }
 }
-
-
-
-

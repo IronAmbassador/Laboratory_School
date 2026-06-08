@@ -7,10 +7,12 @@ import com.laboratory.model.vo.project.ProjectVO;
 
 import java.util.List;
 
-/**
- *
- */
 public interface ProjectService extends IService<Project> {
-
     List<ProjectVO> getAll(Integer pIndex, Integer pSize, ProjectQueryDto projectQueryDto);
+
+    @Override
+    boolean save(Project entity);
+
+    @Override
+    boolean updateById(Project entity);
 }

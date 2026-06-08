@@ -13,4 +13,10 @@ import java.util.List;
 public interface OpenService extends IService<Open> {
     List<OpenVo> getAll(Integer pIndex, Integer pSize, OpenQueryDto openQueryDto);
 
+
+    @Override
+    boolean save(Open entity);
+
+    @Override
+    boolean updateById(Open entity);
 }

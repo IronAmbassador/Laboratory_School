@@ -60,10 +60,19 @@ export default {
   methods: {
     // 获取设备
     getDeviceList() {
-      deviceApi.getList().then((res) => {
-        this.deviceList = res.data
-      })
-    },
+  deviceApi.getList().then((res) => {
+    // 根据设备名称去重
+    const unique = []
+    const names = new Set()
+    for (const item of res.data) {
+      if (!names.has(item.deviceName)) {
+        names.add(item.deviceName)
+        unique.push(item)
+      }
+    }
+    this.deviceList = unique
+  })
+},
 
     // 添加
     save() {

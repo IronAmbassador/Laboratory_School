@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laboratory.mapper.PersonMapper">
+
+    <!-- 查询 -->
+    <select id="getAll" resultType="com.laboratory.model.vo.person.PersonVo" parameterType="com.laboratory.model.dto.person.PersonQueryDto">
+        select * from lab_person p inner join lab_sub l on p.lab_id = l.id
+        where p.is_deleted = 0 and l.is_deleted = 0
+          <if test="labSubId != null and labSubId != ''">
+              and p.lab_id = #{labSubId}
+          </if>
+        <if test="name != null and name != ''">
+            and p.name like concat('%', #{name}, '%')
+        </if>
+        <if test="sex != null and sex != '全部'">
+            and p.sex = #{sex}
+        </if>
+        <if test="address != null and address != ''">
+            and p.address like concat('%', #{address}, '%')
+        </if>
+        order by p.update_time desc
+    </select>
+</mapper>

@@ -19,8 +19,8 @@
         <el-form-item>
           <el-select v-model="searchObj.roleId" placeholder="身份" clearable @change="getAll()">
             <el-option value="1" label="超级管理员" />
-            <el-option value="2" label="管理员" />
-            <el-option value="3" label="管理员" />
+            <el-option value="2" label="教师" />
+            <el-option value="3" label="学生" />
           </el-select>
         </el-form-item>
         <el-form-item prop="status">
@@ -68,8 +68,8 @@
         <el-table-column prop="roleId" label="用户身份" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-tag v-if="scope.row.roleId === 1" effect="plain">超级管理员</el-tag>
-            <el-tag v-if="scope.row.roleId === 2" type="success" effect="plain">管理员</el-tag>
-            <el-tag v-if="scope.row.roleId === 3" type="info" effect="plain">管理员</el-tag>
+            <el-tag v-if="scope.row.roleId === 2" type="success" effect="plain">教师</el-tag>
+            <el-tag v-if="scope.row.roleId === 3" type="info" effect="plain">学生</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="用户状态">
@@ -220,7 +220,7 @@ export default {
         remark: ''
       },
       role: [
-        { id: 1, roleName: '管理员' },
+        { id: 1, roleName: '超级管理员' },
         { id: 2, roleName: '教师' },
         { id: 3, roleName: '学生' }
       ],

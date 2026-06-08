@@ -169,7 +169,7 @@ export default {
     }
   },
   mounted() {
-    if (this.roleId != 3) {
+    if (true) {
       // 初始化图表
       deviceApi.getRepairCount().then((res) => {
         this.initBarChart(res.data)
@@ -201,6 +201,12 @@ export default {
     }
   },
   methods: {
+
+     hasRoles(...roles) {
+    const userRole = this.roleId
+    if (!userRole) return false
+    return roles.includes(userRole)
+  },
     // 获取最近登录记录
     getSystemMsg() {
       logApi.getPage(1, 6, {}).then((res) => {

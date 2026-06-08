@@ -1,0 +1,26 @@
+# 设置命名空间
+spring:
+  profiles:
+    active: local
+
+  # 全局时间格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+# mybatis-plus 配置
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      table-prefix: lab_
+      table-underline: true
+  configuration:
+    map-underscore-to-camel-case: true
+
+# pageHelp 配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  page-size-zero: false

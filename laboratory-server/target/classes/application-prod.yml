@@ -1,0 +1,31 @@
+# 配置端口号和上下文
+server:
+  port: 8090 # 设置内嵌tomcat端口号
+
+# 配置数据库连接信息信息
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource # 数据源类型
+    username: {你的数据库用户名} # 用户名
+    password: {你的数据库密码} # 密码
+    url: jdbc:mysql://{你的服务器地址}:3301/laboratorydb # 连接地址
+    driver-class-name: com.mysql.cj.jdbc.Driver # 驱动名称(8.0版本)
+    #    driver-class-name: com.mysql.jdbc.Driver  # 驱动名称(5.7版本)
+    druid:
+      initial-size: 10 # 初始化连接
+      max-active: 50 # 最大连接数量
+      min-idle: 5 # 最小空闲数量
+      max-wait: 60000 # 超时等待时间以毫秒为单位
+
+# minio 配置
+minio:
+  url: http://{你的服务器地址}:9000
+  accessKey: {你的访问key}
+  secretKey: {你的密钥}
+  bucket: laboratory
+
+# 日志配置
+logging:
+  level:
+    com.laboratory: debug
+    org.springframework: warn

@@ -4,7 +4,7 @@
     <el-row>
       <el-form :inline="true">
         <el-form-item>
-          <el-input v-model="searchObj.LabName" placeholder="分室名称" />
+          <el-input v-model="searchObj.labName" placeholder="分室名称" />
         </el-form-item>
         <el-form-item>
           <el-select v-model="searchObj.labType" placeholder="学院" clearable @change="getAll()">
@@ -393,21 +393,32 @@ export default {
     })
   },
   methods: {
-    //实验室信息
-    getAll(current = 1) {
-      this.loading = true
-      // 加载列表数据
-      this.pIndex = current //添加当前页参数
-      // axios异步获取远程数据（ajax），通过api
-      labSubApi
-        .getPage(this.pIndex, this.pSize, this.searchObj)
-        .then((response) => {
-          this.page = response.data
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
+  //实验室信息
+  getAll(current = 1) {
+  this.loading = true
+  // 加载列表数据
+  this.pIndex = current
+  
+  // 删除空值参数，实现只输入一个条件也能搜索
+  const cleanParams = {}
+  for (let key in this.searchObj) {
+    if (this.searchObj[key] !== '' && 
+        this.searchObj[key] !== null && 
+        this.searchObj[key] !== undefined) {
+      cleanParams[key] = this.searchObj[key]
+    }
+  }
+  
+  // axios异步获取远程数据（ajax），通过api
+  labSubApi
+    .getPage(this.pIndex, this.pSize, cleanParams)
+    .then((response) => {
+      this.page = response.data
+    })
+    .finally(() => {
+      this.loading = false
+    })
+},
 
     // 改变页码
     handleSizeChange(pageSize) {
